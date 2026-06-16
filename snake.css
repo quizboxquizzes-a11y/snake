@@ -1,0 +1,517 @@
+/* snake.css - Full Production Style and Interface Layout System */
+:root {
+    --g-blue: #4285f4;
+    --g-red: #ea4335;
+    --g-yellow: #fbbc05;
+    --g-green: #34a853;
+    
+    --google-score-bg: #4ec043;
+    --google-grass-light: #aad751;
+    --google-grass-dark: #a2d149;
+    --google-container-frame: #578a34;
+    
+    --snake-skin-primary: #4674e9;
+    --snake-skin-shadow: #3762cf;
+    --apple-core-color: #e93b16;
+    
+    --interface-card-bg: #ffffff;
+    --interface-text-main: #1f2937;
+    --interface-text-muted: #6b7280;
+    --interface-borders: #e5e7eb;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+body {
+    background-color: var(--google-container-frame);
+    color: var(--interface-text-main);
+    min-height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding: 10px;
+}
+
+/* Master Layout Encapsulation Viewport Box */
+#app-wrapper {
+    width: 100%;
+    max-width: 540px;
+    background-color: var(--interface-card-bg);
+    border-radius: 16px;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Action Panels UI */
+#app-bar {
+    background-color: #ffffff;
+    height: 52px;
+    border-bottom: 1px solid var(--interface-borders);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 16px;
+}
+
+.bar-section {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+.bar-section.center {
+    justify-content: center;
+    flex: 2;
+}
+.bar-section.right {
+    justify-content: flex-end;
+}
+
+.app-brand {
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    color: var(--interface-text-main);
+}
+
+.bar-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    color: var(--interface-text-muted);
+    transition: background-color 0.15s, color 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.bar-btn:hover {
+    background-color: var(--interface-borders);
+    color: var(--interface-text-main);
+}
+.bar-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+}
+
+/* Score Panel Display Mechanics */
+#game-scoreboard {
+    background-color: var(--google-score-bg);
+    height: 64px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 60px;
+    box-shadow: inset 0 -4px 6px rgba(0,0,0,0.06);
+}
+
+.metric-container {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.metric-value {
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 800;
+    font-family: monospace;
+}
+
+.metric-icon {
+    width: 28px;
+    height: 28px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+.asset-apple {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ea4335"><circle cx="12" cy="13" r="8"/><path d="M12 5c0-2 2-3 2-3s-2 1-2 3z" stroke="%2334a853" stroke-width="2"/></svg>');
+}
+.asset-trophy {
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23fbbc05"><path d="M19 2H5v2h3v3c0 2.2 1.8 4 4 4h0c2.2 0 4-1.8 4-4V4h3V2zm-2 5c0 1.1-.9 2-2 2h0c-1.1 0-2-.9-2-2V4h4v3zM12 11v6H9v2h6v-2h-3v-6h0z"/></svg>');
+}
+
+/* Core Rendering Workspace Stage Config */
+#viewport-stage {
+    position: relative;
+    width: 100%;
+    background-color: var(--google-grass-dark);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    aspect-ratio: 1 / 1;
+}
+
+#canvas-constraint {
+    width: 100%;
+    height: 100%;
+    max-height: 540px;
+}
+
+#game-surface {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: var(--google-grass-light);
+}
+
+/* Fullscreen Menu Intermediary Layer View */
+#modal-screen-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease-in-out;
+    z-index: 100;
+}
+#modal-screen-overlay.state-visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+#overlay-dialog-panel {
+    background-color: #ffffff;
+    width: 88%;
+    max-width: 440px;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 12px 30px rgba(0,0,0,0.25);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(0.9);
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+#modal-screen-overlay.state-visible #overlay-dialog-panel {
+    transform: scale(1);
+}
+
+#overlay-main-heading {
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--interface-text-main);
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+}
+
+#overlay-sub-heading {
+    font-size: 13px;
+    color: var(--interface-text-muted);
+    line-height: 1.5;
+    margin-bottom: 20px;
+    padding: 0 8px;
+}
+
+/* Option Preselector Carousel Rack */
+#cosmetic-preselector-rack {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 24px;
+}
+
+.selector-card {
+    border: 2px solid var(--interface-borders);
+    border-radius: 10px;
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.15s linear;
+}
+.selector-card:hover {
+    background-color: #f9fafb;
+    border-color: #cbd5e1;
+}
+.selector-card.active {
+    border-color: var(--g-blue);
+    background-color: #eff6ff;
+}
+
+.preview-swatch {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+.preview-swatch.red-apple { background-color: var(--g-red); }
+.preview-swatch.gold-apple { background-color: var(--g-yellow); }
+.preview-swatch.blue-snake { background-color: var(--g-blue); }
+.preview-swatch.purple-snake { background-color: #a855f7; }
+
+.selector-card span {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--interface-text-main);
+}
+
+/* Master Primary Action Control Switch Button */
+.g-primary-circle-btn {
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: var(--g-blue);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 14px rgba(66, 133, 244, 0.4);
+    transition: transform 0.15s, background-color 0.15s;
+}
+.g-primary-circle-btn:hover {
+    transform: scale(1.05);
+    background-color: #2563eb;
+}
+.g-primary-circle-btn:active {
+    transform: scale(0.95);
+}
+.g-primary-circle-btn svg {
+    width: 32px;
+    height: 32px;
+    fill: #ffffff;
+    margin-left: 4px;
+}
+
+/* Responsive Accessibility Control Pad Deck Framework */
+#mobile-control-deck {
+    background-color: #f3f4f6;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-top: 1px solid var(--interface-borders);
+}
+
+.deck-row {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.d-pad-btn {
+    width: 60px;
+    height: 50px;
+    background-color: #ffffff;
+    border: 1px solid var(--interface-borders);
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--interface-text-main);
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background-color 0.1s, transform 0.1s;
+}
+.d-pad-btn:active {
+    background-color: #e5e7eb;
+    transform: scale(0.95);
+}
+.d-pad-spacer {
+    width: 64px;
+}
+
+/* Sidebar Option Panel Drawers */
+.sidebar-drawer-dimmer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s linear;
+}
+.sidebar-drawer-dimmer.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.drawer-surface {
+    position: absolute;
+    top: 0;
+    right: -320px;
+    width: 320px;
+    height: 100%;
+    background-color: #ffffff;
+    box-shadow: -4px 0 25px rgba(0,0,0,0.15);
+    transition: right 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px;
+}
+.sidebar-drawer-dimmer.open .drawer-surface {
+    right: 0;
+}
+
+.close-drawer-btn {
+    position: absolute;
+    top: 20px;
+    left: 24px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--interface-text-muted);
+}
+
+.drawer-header-title {
+    font-size: 18px;
+    font-weight: 800;
+    text-align: right;
+    margin-bottom: 32px;
+    color: var(--interface-text-main);
+    letter-spacing: -0.01em;
+}
+
+.drawer-scroll-body {
+    flex-grow: 1;
+    overflow-y: auto;
+}
+
+.config-row-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--interface-borders);
+}
+.config-lbl {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--interface-text-main);
+}
+.config-desc {
+    font-size: 11px;
+    color: var(--interface-text-muted);
+    line-height: 1.4;
+    margin-top: 2px;
+}
+
+/* Custom UI Component Node Blocks Elements */
+.g-select-control {
+    width: 100%;
+    height: 36px;
+    border-radius: 6px;
+    border: 1px solid var(--interface-borders);
+    background-color: #f9fafb;
+    padding: 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--interface-text-main);
+    outline: none;
+}
+.g-select-control:focus {
+    border-color: var(--g-blue);
+}
+
+/* Google-inspired Sliders Toggle Switch Element */
+.g-switch-node {
+    position: relative;
+    display: inline-block;
+    width: 44px;
+    height: 24px;
+    align-self: flex-start;
+}
+.g-switch-node input { opacity: 0; width: 0; height: 0; }
+.g-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #cbd5e1;
+    transition: .2s;
+    border-radius: 24px;
+}
+.g-slider:before {
+    position: absolute;
+    content: "";
+    height: 18px; width: 18px;
+    left: 3px; bottom: 3px;
+    background-color: white;
+    transition: .2s;
+    border-radius: 50%;
+}
+input:checked + .g-slider { background-color: var(--g-green); }
+input:checked + .g-slider:before { transform: translateX(20px); }
+
+/* Stats Profile Dashboard View Grid Layout Elements */
+.statistics-dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+.dashboard-metric-tile {
+    background-color: #f9fafb;
+    border: 1px solid var(--interface-borders);
+    border-radius: 8px;
+    padding: 14px;
+    text-align: center;
+}
+.dash-val {
+    display: block;
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--g-blue);
+    font-family: monospace;
+}
+.dash-lbl {
+    font-size: 10px;
+    color: var(--interface-text-muted);
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-top: 4px;
+    display: block;
+}
+
+.g-danger-action-btn {
+    width: 100%;
+    padding: 12px;
+    background-color: #fef2f2;
+    border: 1px solid #fee2e2;
+    color: var(--g-red);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+.g-danger-action-btn:hover { background-color: #fee2e2; }
+
+/* Responsive Media Handling Layout Adjustments for Desktop Laptops */
+@media (min-height: 800px) {
+    #mobile-control-deck { display: none; } /* Hide Virtual Controller Deck if viewport allows roomy layout navigation */
+    #app-wrapper { max-width: 500px; }
+}
+@media (max-height: 640px) {
+    #app-bar { height: 44px; }
+    #game-scoreboard { height: 48px; }
+    #mobile-control-deck { display: none; }
+}
