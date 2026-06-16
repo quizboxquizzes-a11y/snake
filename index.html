@@ -89,51 +89,64 @@
     </div>
 
     <div class="sidebar-drawer-dimmer" id="drawer-settings">
-        <div class="drawer-surface">
+        <div class="drawer-surface settings-modal">
             <button class="close-drawer-btn" id="close-settings-panel">✕</button>
-            <h3 class="drawer-header-title">ENGINE OPTIONS</h3>
+            
+            <h3 class="drawer-header-title">Settings</h3>
+            
             <div class="drawer-scroll-body">
-                <div class="config-row-item">
-                    <div>
-                        <span class="config-lbl">Grid System Density</span>
-                        <p class="config-desc">Alters rows/columns density within the rendering canvas frame.</p>
+                <div class="settings-group">
+                    <h4 class="group-title">Gameplay</h4>
+                    
+                    <div class="config-row-item">
+                        <div class="config-text">
+                            <span class="config-lbl">Grid Size</span>
+                            <p class="config-desc">Change the board dimensions and difficulty.</p>
+                        </div>
+                        <select class="g-select-control" id="opt-grid-density">
+                            <option value="11">11 × 11 (Easy)</option>
+                            <option value="17" selected>17 × 17 (Normal)</option>
+                            <option value="25">25 × 25 (Hard)</option>
+                        </select>
                     </div>
-                    <select class="g-select-control" id="opt-grid-density">
-                        <option value="11">Compact Grid (11x11)</option>
-                        <option value="17" selected>Standard Grid (17x17)</option>
-                        <option value="25">Dense Grid (25x25)</option>
-                    </select>
+
+                    <div class="config-row-item">
+                        <div class="config-text">
+                            <span class="config-lbl">Game Speed</span>
+                            <p class="config-desc">Adjust how fast the snake moves.</p>
+                        </div>
+                        <select class="g-select-control" id="opt-game-speed">
+                            <option value="180">Slow</option>
+                            <option value="130" selected>Normal</option>
+                            <option value="80">Fast</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="config-row-item">
-                    <div>
-                        <span class="config-lbl">Velocity Framework Step Speed</span>
-                        <p class="config-desc">Sets the clock tick milliseconds logic constraints.</p>
+
+                <div class="settings-group">
+                    <h4 class="group-title">Preferences</h4>
+
+                    <div class="config-row-item">
+                        <div class="config-text">
+                            <span class="config-lbl">Sound Effects</span>
+                            <p class="config-desc">Play retro tones when eating food.</p>
+                        </div>
+                        <label class="g-switch-node">
+                            <input type="checkbox" id="opt-audio-toggle" checked>
+                            <span class="g-slider"></span>
+                        </label>
                     </div>
-                    <select class="g-select-control" id="opt-game-speed">
-                        <option value="180">Relaxed Pace</option>
-                        <option value="130" selected>Normal Flow</option>
-                        <option value="80">Hyper Drive</option>
-                    </select>
-                </div>
-                <div class="config-row-item">
-                    <div>
-                        <span class="config-lbl">Synthesized Retro Audio</span>
-                        <p class="config-desc">Generates browser oscillator sound tones on food consumption events.</p>
+
+                    <div class="config-row-item">
+                        <div class="config-text">
+                            <span class="config-lbl">Wall Teleport</span>
+                            <p class="config-desc">Pass through edges instead of crashing.</p>
+                        </div>
+                        <label class="g-switch-node">
+                            <input type="checkbox" id="opt-wrap-toggle">
+                            <span class="g-slider"></span>
+                        </label>
                     </div>
-                    <label class="g-switch-node">
-                        <input type="checkbox" id="opt-audio-toggle" checked>
-                        <span class="g-slider"></span>
-                    </label>
-                </div>
-                <div class="config-row-item">
-                    <div>
-                        <span class="config-lbl">Wall Wrap Matrix Mode</span>
-                        <p class="config-desc">Enables teleporting to opposite boundaries on edge cross crashes.</p>
-                    </div>
-                    <label class="g-switch-node">
-                        <input type="checkbox" id="opt-wrap-toggle">
-                        <span class="g-slider"></span>
-                    </label>
                 </div>
             </div>
         </div>
