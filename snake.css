@@ -336,7 +336,7 @@ body {
     width: 64px;
 }
 
-/* Sidebar Option Panel Drawers */
+/* --- DETAILED COMPACT OPTION PREFERENCES OVERLAY DESIGN --- */
 .sidebar-drawer-dimmer {
     position: fixed;
     top: 0;
@@ -344,10 +344,14 @@ body {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.4);
-    z-index: 500;
+    backdrop-filter: blur(4px);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.25s linear;
+    transition: opacity 0.2s ease-out;
 }
 .sidebar-drawer-dimmer.open {
     opacity: 1;
@@ -371,66 +375,100 @@ body {
     right: 0;
 }
 
-.close-drawer-btn {
-    position: absolute;
-    top: 20px;
-    left: 24px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-    color: var(--interface-text-muted);
+/* Custom Override Configuration specifically for our Preferences Center View */
+.drawer-surface.settings-modal {
+    position: relative;
+    right: auto;
+    width: 90%;
+    max-width: 400px;
+    height: auto;
+    max-height: 85vh;
+    border-radius: 16px;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+    transform: scale(0.9);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.sidebar-drawer-dimmer.open .drawer-surface.settings-modal {
+    transform: scale(1);
 }
 
 .drawer-header-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
-    text-align: right;
-    margin-bottom: 32px;
+    text-align: left;
+    margin-bottom: 20px;
     color: var(--interface-text-main);
-    letter-spacing: -0.01em;
+    letter-spacing: -0.02em;
 }
+
+.close-drawer-btn {
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    left: auto;
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--interface-text-muted);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.1s ease;
+}
+.close-drawer-btn:hover { color: var(--g-red); }
 
 .drawer-scroll-body {
     flex-grow: 1;
     overflow-y: auto;
 }
 
-.config-row-item {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding: 16px 0;
-    border-bottom: 1px solid var(--interface-borders);
+/* Settings Visual Component Blocks */
+.settings-group {
+    margin-bottom: 18px;
+    background-color: #f8fafc;
+    border: 1px solid #f1f5f9;
+    border-radius: 12px;
+    padding: 14px;
 }
-.config-lbl {
-    font-weight: 700;
-    font-size: 14px;
-    color: var(--interface-text-main);
-}
-.config-desc {
+.group-title {
     font-size: 11px;
-    color: var(--interface-text-muted);
-    line-height: 1.4;
-    margin-top: 2px;
+    font-weight: 800;
+    text-transform: uppercase;
+    color: var(--g-blue);
+    letter-spacing: 0.05em;
+    margin-bottom: 10px;
 }
 
-/* Custom UI Component Node Blocks Elements */
+.config-row-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #f1f5f9;
+    gap: 16px;
+}
+.config-row-item:last-of-type { border-bottom: none; padding-bottom: 0; }
+.config-row-item:first-of-type { padding-top: 0; }
+
+.config-text { flex: 1; text-align: left; }
+.config-lbl { font-weight: 700; font-size: 14px; color: var(--interface-text-main); }
+.config-desc { font-size: 11px; color: var(--interface-text-muted); line-height: 1.4; margin-top: 2px; }
+
 .g-select-control {
-    width: 100%;
+    width: 130px;
     height: 36px;
-    border-radius: 6px;
-    border: 1px solid var(--interface-borders);
-    background-color: #f9fafb;
-    padding: 0 10px;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    background-color: #ffffff;
+    padding: 0 8px;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     color: var(--interface-text-main);
+    cursor: pointer;
     outline: none;
 }
-.g-select-control:focus {
-    border-color: var(--g-blue);
-}
+.g-select-control:hover { border-color: #94a3b8; }
+.g-select-control:focus { border-color: var(--g-blue); }
 
 /* Google-inspired Sliders Toggle Switch Element */
 .g-switch-node {
@@ -438,7 +476,7 @@ body {
     display: inline-block;
     width: 44px;
     height: 24px;
-    align-self: flex-start;
+    flex-shrink: 0;
 }
 .g-switch-node input { opacity: 0; width: 0; height: 0; }
 .g-slider {
@@ -507,7 +545,7 @@ input:checked + .g-slider:before { transform: translateX(20px); }
 
 /* Responsive Media Handling Layout Adjustments for Desktop Laptops */
 @media (min-height: 800px) {
-    #mobile-control-deck { display: none; } /* Hide Virtual Controller Deck if viewport allows roomy layout navigation */
+    #mobile-control-deck { display: none; }
     #app-wrapper { max-width: 500px; }
 }
 @media (max-height: 640px) {
