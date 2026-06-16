@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Google Snake Ultimate Edition</title>
+    <link rel="stylesheet" href="snake.css">
+</head>
+<body>
+
+    <div id="app-wrapper">
+        
+        <header id="app-bar">
+            <div class="bar-section left">
+                <button class="bar-btn" id="btn-menu-toggle" aria-label="Open Settings Menu">
+                    <svg viewBox="0 0 24 24"><path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/></svg>
+                </button>
+            </div>
+            <div class="bar-section center">
+                <h1 class="app-brand">SNAKE CLASSIC</h1>
+            </div>
+            <div class="bar-section right">
+                <button class="bar-btn" id="btn-stats-toggle" aria-label="Open Game Statistics">
+                    <svg viewBox="0 0 24 24"><path d="M16 11h2v7h-2v-7zm-5-6h2v13h-2V5zm-5 9h2v4H6v-4z"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <section id="game-scoreboard">
+            <div class="metric-container">
+                <div class="metric-icon asset-apple"></div>
+                <div class="metric-value" id="count-score">000</div>
+            </div>
+            <div class="metric-container">
+                <div class="metric-icon asset-trophy"></div>
+                <div class="metric-value" id="count-high">000</div>
+            </div>
+        </section>
+
+        <main id="viewport-stage">
+            <div id="canvas-constraint">
+                <canvas id="game-surface" width="600" height="600"></canvas>
+            </div>
+
+            <div id="modal-screen-overlay" class="state-visible">
+                <div id="overlay-dialog-panel">
+                    <h2 id="overlay-main-heading">READY PLAYER ONE</h2>
+                    <p id="overlay-sub-heading">Select your preferences or click play below to start navigation sequences</p>
+                    
+                    <div id="cosmetic-preselector-rack">
+                        <div class="selector-card active" data-type="apple" data-val="red">
+                            <div class="preview-swatch red-apple"></div>
+                            <span>Red Apple</span>
+                        </div>
+                        <div class="selector-card" data-type="apple" data-val="gold">
+                            <div class="preview-swatch gold-apple"></div>
+                            <span>Gold Apple</span>
+                        </div>
+                        <div class="selector-card" data-type="snake" data-val="blue">
+                            <div class="preview-swatch blue-snake"></div>
+                            <span>Classic Blue</span>
+                        </div>
+                        <div class="selector-card" data-type="snake" data-val="purple">
+                            <div class="preview-swatch purple-snake"></div>
+                            <span>Neon Purple</span>
+                        </div>
+                    </div>
+
+                    <button id="action-trigger-play" class="g-primary-circle-btn" aria-label="Initialize Gameplay Lifecycle">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <footer id="mobile-control-deck">
+            <div class="deck-row">
+                <button class="d-pad-btn" id="pad-up" aria-label="Move Up">▲</button>
+            </div>
+            <div class="deck-row">
+                <button class="d-pad-btn" id="pad-left" aria-label="Move Left">◀</button>
+                <div class="d-pad-spacer"></div>
+                <button class="d-pad-btn" id="pad-right" aria-label="Move Right">▶</button>
+            </div>
+            <div class="deck-row">
+                <button class="d-pad-btn" id="pad-down" aria-label="Move Down">▼</button>
+            </div>
+        </footer>
+    </div>
+
+    <div class="sidebar-drawer-dimmer" id="drawer-settings">
+        <div class="drawer-surface">
+            <button class="close-drawer-btn" id="close-settings-panel">✕</button>
+            <h3 class="drawer-header-title">ENGINE OPTIONS</h3>
+            <div class="drawer-scroll-body">
+                <div class="config-row-item">
+                    <div>
+                        <span class="config-lbl">Grid System Density</span>
+                        <p class="config-desc">Alters rows/columns density within the rendering canvas frame.</p>
+                    </div>
+                    <select class="g-select-control" id="opt-grid-density">
+                        <option value="11">Compact Grid (11x11)</option>
+                        <option value="17" selected>Standard Grid (17x17)</option>
+                        <option value="25">Dense Grid (25x25)</option>
+                    </select>
+                </div>
+                <div class="config-row-item">
+                    <div>
+                        <span class="config-lbl">Velocity Framework Step Speed</span>
+                        <p class="config-desc">Sets the clock tick milliseconds logic constraints.</p>
+                    </div>
+                    <select class="g-select-control" id="opt-game-speed">
+                        <option value="180">Relaxed Pace</option>
+                        <option value="130" selected>Normal Flow</option>
+                        <option value="80">Hyper Drive</option>
+                    </select>
+                </div>
+                <div class="config-row-item">
+                    <div>
+                        <span class="config-lbl">Synthesized Retro Audio</span>
+                        <p class="config-desc">Generates browser oscillator sound tones on food consumption events.</p>
+                    </div>
+                    <label class="g-switch-node">
+                        <input type="checkbox" id="opt-audio-toggle" checked>
+                        <span class="g-slider"></span>
+                    </label>
+                </div>
+                <div class="config-row-item">
+                    <div>
+                        <span class="config-lbl">Wall Wrap Matrix Mode</span>
+                        <p class="config-desc">Enables teleporting to opposite boundaries on edge cross crashes.</p>
+                    </div>
+                    <label class="g-switch-node">
+                        <input type="checkbox" id="opt-wrap-toggle">
+                        <span class="g-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar-drawer-dimmer" id="drawer-stats">
+        <div class="drawer-surface">
+            <button class="close-drawer-btn" id="close-stats-panel">✕</button>
+            <h3 class="drawer-header-title">PERFORMANCE PROFILES</h3>
+            <div class="drawer-scroll-body">
+                <div class="statistics-dashboard-grid">
+                    <div class="dashboard-metric-tile">
+                        <span class="dash-val" id="profile-total-runs">0</span>
+                        <span class="dash-lbl">Total Attempts</span>
+                    </div>
+                    <div class="dashboard-metric-tile">
+                        <span class="dash-val" id="profile-total-apples">0</span>
+                        <span class="dash-lbl">Apples Devoured</span>
+                    </div>
+                    <div class="dashboard-metric-tile">
+                        <span class="dash-val" id="profile-avg-score">0</span>
+                        <span class="dash-lbl">Average Score</span>
+                    </div>
+                    <div class="dashboard-metric-tile">
+                        <span class="dash-val" id="profile-total-steps">0</span>
+                        <span class="dash-lbl">Total Steps Taken</span>
+                    </div>
+                </div>
+                <button id="action-reset-profile" class="g-danger-action-btn">RESET PROFILE SNAPSHOT</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="snake.js"></script>
+</body>
+</html>
