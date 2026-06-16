@@ -26,7 +26,7 @@
         
         statTotalRuns: document.getElementById("profile-total-runs"),
         statTotalApples: document.getElementById("profile-total-apples"),
-        statAvgScore: document.getElementById("profile-total-apples"), 
+        statAvgScore: document.getElementById("profile-avg-score"),
         statTotalSteps: document.getElementById("profile-total-steps"),
         btnResetProfile: document.getElementById("action-reset-profile"),
         
@@ -75,7 +75,7 @@
                 gain.connect(this.ctx.destination);
                 osc.start();
                 osc.stop(this.ctx.currentTime + duration);
-            } catch (e) { console.warn("Audio Context blocked by policy matrix triggers."); }
+            } catch (e) { console.warn("Audio Context blocked by browser policy restrictions."); }
         }
     };
 
@@ -91,7 +91,7 @@
         DOM.statTotalSteps.textContent = profileStore.steps;
         
         let calculationAvg = profileStore.runs > 0 ? Math.round(profileStore.accumulatedScores / profileStore.runs) : 0;
-        document.getElementById("profile-avg-score").textContent = calculationAvg;
+        DOM.statAvgScore.textContent = calculationAvg;
     }
 
     function paintRenderCanvasLoopFrameCycle() {
@@ -277,7 +277,7 @@
         window.addEventListener("keydown", (e) => {
             let k = e.key;
             if (["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", " ", "w", "a", "s", "d"].includes(k)) {
-                e.preventDefault(); // Extinguish scrolling defaults layouts parameters
+                e.preventDefault(); // Prevent page spacebar scrolling layouts defaults
             }
 
             if (!isActiveSession && k === " ") {
